@@ -26,7 +26,7 @@ export default {
   },
   mounted () {
     paypal.Button.render({
-      env: 'sandbox',
+      env: process.env.NODE_ENV === 'production' ? 'production' : 'sandbox',
 
       commit: true,
 
@@ -40,7 +40,7 @@ export default {
 
       client: {
         sandbox: 'AbWOHwxVEl8WAQvPxGOWF4LQAbo9n-PBBg6A9RDHEwSal64k2aHbuW1vNoV0wguwkFnDcKX89ppI5vdw',
-        production: '<insert production client id>'
+        production: 'AT99udy6QwHym74yFhgilqEVyiAu42cFGvP24hhIZf10h0-fiEAEW8POLV5530OVSBtHb2OJmrRmw2_2'
       },
 
       payment: () => {
