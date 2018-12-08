@@ -85,15 +85,15 @@ export default new Vuex.Store({
       return state.settings.maxParticipants > state.settings.currentParticipants
     },
     isPurchaseAllowed: (state, getters) => {
+      if (!getters.isTicketsLeft) {
+        return false
+      }
+
       if (state.overrideCode) {
         return true
       }
 
       if (!getters.isSalesOpen) {
-        return false
-      }
-
-      if (!getters.isTicketsLeft) {
         return false
       }
 
