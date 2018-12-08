@@ -81,6 +81,11 @@ export default {
         this.$store.commit('setOverride', this.$route.query.override)
       }
     }
+  },
+  mounted () {
+    if (this.$route.query.override) {
+      this.$store.commit('setOverride', this.$route.query.override)
+    }
   }
 }
 </script>
