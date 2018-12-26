@@ -1,16 +1,19 @@
 import Vue from 'vue'
+import store from '@/store'
 import Router from 'vue-router'
 
-import StoreFrame from './components/StoreFrame.vue'
+import StoreFrame from '@/components/StoreFrame.vue'
 
-import Home from './views/Home.vue'
-import OrderDetails from './views/OrderDetails.vue'
+import Home from '@/views/Home.vue'
+import OrderDetails from '@/views/OrderDetails.vue'
 
-import TermsConditions from './views/TermsConditions'
-import Participants from './views/Participants'
-import Review from './views/Review'
+import TermsConditions from '@/views/TermsConditions'
+import Participants from '@/views/Participants'
+import Review from '@/views/Review'
 
-import store from './store'
+import Login from '@/views/Login'
+
+import AdminFrame from '@/components/AdminFrame'
 
 Vue.use(Router)
 
@@ -21,6 +24,19 @@ export default new Router({
       redirect: '/store'
     },
     {
+      path: '/login',
+      component: Login
+    },
+    {
+      path: '/admin',
+      component: AdminFrame,
+      children: [
+        {
+          path: '/'
+        }
+      ]
+    },
+    {
       path: '/store',
       component: StoreFrame,
       children: [
@@ -29,11 +45,11 @@ export default new Router({
           component: Home
         },
         {
-          path: '/order/tc',
+          path: 'order/tc',
           name: 'order-tc',
           component: TermsConditions,
           beforeEnter: (to, from, next) => {
-            if (!store.getters.isPurchaseAllowed) {
+            if (!store.getters['store/isPurchaseAllowed']) {
               return next('/store')
             }
 
@@ -41,15 +57,15 @@ export default new Router({
           }
         },
         {
-          path: '/order/participants',
+          path: 'order/participants',
           name: 'order-participants',
           component: Participants,
           beforeEnter: (to, from, next) => {
-            if (!store.getters.isPurchaseAllowed) {
+            if (!store.getters['store/isPurchaseAllowed']) {
               return next('/store')
             }
 
-            if (!store.state.tcsAccepted) {
+            if (!store.state.store.tcsAccepted) {
               return next('/store/order/tc')
             }
 
@@ -57,19 +73,19 @@ export default new Router({
           }
         },
         {
-          path: '/order/review',
+          path: 'order/review',
           name: 'order-review',
           component: Review,
           beforeEnter: (to, from, next) => {
-            if (!store.getters.isPurchaseAllowed) {
+            if (!store.getters['store/isPurchaseAllowed']) {
               return next('/')
             }
 
-            if (!store.state.tcsAccepted) {
+            if (!store.state.store.tcsAccepted) {
               return next('/store/order/tc')
             }
 
-            if (!store.state.participantsComplete) {
+            if (!store.state.store.participantsComplete) {
               return next('/store/order/participants')
             }
 

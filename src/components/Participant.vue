@@ -1,89 +1,100 @@
 <template>
-  <v-flex xs12 lg4>
+  <v-flex
+    xs12
+    lg4
+  >
     <v-card class="elevation-6">
       <v-card-title primary-title>
-          <h3>{{first}} {{last}}</h3>
+        <h3>{{ first }} {{ last }}</h3>
       </v-card-title>
 
-      <v-divider/>
+      <v-divider />
       <v-card-text>
         <v-form>
           <v-text-field
+            v-model="first"
             label="First Name"
             placeholder="Placeholder"
-            v-model="first"
             :error-messages="$v.first.$invalid ? 'This field is required' : null"
-          ></v-text-field>
+          />
 
           <v-text-field
+            v-model="last"
             label="Last Name"
             placeholder="Placeholder"
-            v-model="last"
             :error-messages="$v.last.$invalid ? 'This field is required' : null"
-          ></v-text-field>
+          />
 
           <v-text-field
+            v-model="nick"
             label="Nickname"
             placeholder="Placeholder"
-            v-model="nick"
             counter="16"
             :error-messages="$v.nick.$invalid ? 'Nicknames must be between 4 and 16 chars' : null"
             hint="This will appear on your number-plate. Keep it family friendly!"
             persistent-hint
-          ></v-text-field>
+          />
 
           <v-select
+            v-model="gender"
             :items="genderOptions"
             label="Gender"
-            v-model="gender"
             :error-messages="$v.gender.$invalid ? 'Gender is a required field' : null"
-          ></v-select>
+          />
 
           <v-menu
-              ref="dateSelector"
-              :close-on-content-click="false"
-              v-model="dateSelector"
-              :nudge-right="40"
-              lazy
-              transition="scale-transition"
-              offset-y
-              full-width
-              min-width="290px"
-            >
-              <v-text-field
-                slot="activator"
-                v-model="dob"
-                label="Birth date"
-                prepend-icon="event"
-                readonly
-                :error-messages="$v.dob.$invalid ? 'DoB is a required field' : null"
-              ></v-text-field>
-              <v-date-picker
-                ref="picker"
-                v-model="dob"
-                :max="new Date().toISOString().substr(0, 10)"
-                min="1900-01-01"
-                @change="saveDate"
-              ></v-date-picker>
+            ref="dateSelector"
+            v-model="dateSelector"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            lazy
+            transition="scale-transition"
+            offset-y
+            full-width
+            min-width="290px"
+          >
+            <v-text-field
+              slot="activator"
+              v-model="dob"
+              label="Birth date"
+              prepend-icon="event"
+              readonly
+              :error-messages="$v.dob.$invalid ? 'DoB is a required field' : null"
+            />
+            <v-date-picker
+              ref="picker"
+              v-model="dob"
+              :max="new Date().toISOString().substr(0, 10)"
+              min="1900-01-01"
+              @change="saveDate"
+            />
           </v-menu>
 
           <v-text-field
             v-if="age >= 18"
+            v-model="mobile"
             label="Mobile Number"
             placeholder=""
-            v-model="mobile"
             :error-messages="$v.mobile.$invalid ? 'Must be a valid phone number' : null"
             hint="We will only use this for emergency contact at BBB"
             persistent-hint
-          ></v-text-field>
+          />
         </v-form>
       </v-card-text>
 
-      <v-divider/>
+      <v-divider />
       <v-card-actions>
-        <v-btn color="error" @click='deleteParticipant(participant)'>
+        <v-btn
+          color="error"
+          @click="deleteParticipant(participant)"
+        >
           Delete
-          <v-icon dark right>cancel</v-icon>
+          <v-icon
+            dark
+            right
+          >
+            cancel
+          </v-icon>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -113,16 +124,8 @@ function produceComputedProperty (key) {
 }
 
 export default {
-  name: 'participant',
+  name: 'Participant',
   props: ['participant'],
-  computed: {
-    ...['first', 'last', 'nick', 'mobile', 'dob', 'gender'].reduce((acc, key) => ({ ...acc, [key]: produceComputedProperty(key) }), {}), // maps getter/setters for participant fancily
-    age () {
-      if (this.dob) {
-        return moment(this.$store.state.settings.bashDate).diff(this.dob, 'years')
-      }
-    }
-  },
   data () {
     return {
       dateSelector: false,
@@ -142,16 +145,20 @@ export default {
       ]
     }
   },
+  computed: {
+    ...['first', 'last', 'nick', 'mobile', 'dob', 'gender'].reduce((acc, key) => ({ ...acc, [key]: produceComputedProperty(key) }), {}), // maps getter/setters for participant fancily
+    age () {
+      if (this.dob) {
+        return moment(this.$store.state.store.settings.bashDate).diff(this.dob, 'years')
+      }
+
+      return 0
+    }
+  },
   watch: {
     dateSelector (val) {
       val && this.$nextTick(() => (this.$refs.picker.activePicker = 'YEAR'))
     }
-  },
-  methods: {
-    saveDate (date) {
-      this.$refs.dateSelector.save(date)
-    },
-    ...mapMutations(['deleteParticipant', 'updateParticipant'])
   },
   created () {
     this.$watch(() => this.$v.$invalid, (newVal, oldVal) => { // Handle updating the invalid property of the participant store-side
@@ -161,6 +168,12 @@ export default {
         participant: this.participant
       })
     }, { immediate: true })
+  },
+  methods: {
+    saveDate (date) {
+      this.$refs.dateSelector.save(date)
+    },
+    ...mapMutations('store', ['deleteParticipant', 'updateParticipant'])
   },
   validations: {
     first: {

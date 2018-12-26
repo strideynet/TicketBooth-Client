@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div id="paypal-button"></div>
-    <br/>
+    <div id="paypal-button" />
+    <br>
   </div>
 </template>
 
@@ -13,8 +13,14 @@ import api from '@/helpers/api'
 export default {
   name: 'Pay',
   props: {
-    jwt: String,
-    orderInfo: Object
+    jwt: {
+      type: String,
+      default: null
+    },
+    orderInfo: {
+      type: Object,
+      default: () => ({})
+    }
   },
   data () {
     return {
@@ -22,7 +28,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['participants'])
+    ...mapState('store', ['participants'])
   },
   mounted () {
     paypal.Button.render({

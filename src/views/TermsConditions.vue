@@ -2,7 +2,7 @@
   <div id="termsconditions">
     <v-card>
       <v-card-title><h1>Terms and Conditions</h1></v-card-title>
-      <v-divider/>
+      <v-divider />
       <v-card-text>
         <v-container
           id="scroll-target"
@@ -11,15 +11,16 @@
         >
           <h2>Privacy Policy and Cookies</h2>
           <p>
-            More information about our privacy policy can be found <a href="/privacypolicy.pdf">here</a>
+            More information about our privacy policy can be found <a href="/privacypolicy.pdf" target="_blank">here</a>
           </p>
 
           <h2>Terms &amp; Conditions </h2>
           <p>
-            These terms and conditions can also be downloaded <a href="/bbbtc.pdf">here</a>
+            These terms and conditions can also be downloaded <a href="/bbbtc.pdf" target="_blank">here</a>
           </p>
 
-          <p>The Terms and Conditions apply to anyone attending the Big Bike Bash 2019 (the Event) organised and run by Action Academy,
+          <p>
+            The Terms and Conditions apply to anyone attending the Big Bike Bash 2019 (the Event) organised and run by Action Academy,
             a charitable foundation (Charity Registration No. 1166211) whose registered address is 78 Shirley Avenue, Southampton, Hampshire, SO15 5NJ (the Event Organiser).
           </p>
 
@@ -171,8 +172,8 @@ export default {
   },
   methods: {
     acceptTerms () {
-      this.$store.commit('acceptTerms')
-      this.$router.push('/order/participants')
+      this.$store.commit('store/acceptTerms')
+      this.$router.push('/store/order/participants')
     }
   }
 }

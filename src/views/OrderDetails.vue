@@ -1,19 +1,36 @@
 <template>
   <div>
     <h1>Order Receipt</h1>
-    <v-divider/>
+    <v-divider />
 
-    <v-layout align-center justify-center v-if="loading">
-      <v-flex xs1 class="text-xs-center">
-          <v-progress-circular indeterminate color="primary"></v-progress-circular> <br/>
-          Loading...
+    <v-layout
+      v-if="loading"
+      align-center
+      justify-center
+    >
+      <v-flex
+        xs1
+        class="text-xs-center"
+      >
+        <v-progress-circular
+          indeterminate
+          color="primary"
+        />
+        <br>
+        Loading...
       </v-flex>
     </v-layout>
-    <v-layout wrap v-else>
-      <v-flex xs12 lg4>
+    <v-layout
+      v-else
+      wrap
+    >
+      <v-flex
+        xs12
+        lg4
+      >
         <v-card>
           <v-card-title><h4>Order</h4></v-card-title>
-          <v-divider/>
+          <v-divider />
           <v-list dense>
             <v-list-tile>
               <p><strong>Email:</strong> {{ details.email }}</p>
@@ -36,7 +53,10 @@
           </v-list>
         </v-card>
       </v-flex>
-      <v-flex xs12 lg8>
+      <v-flex
+        xs12
+        lg8
+      >
         <v-card>
           <v-card-title><h4>Participants</h4></v-card-title>
           <v-divider/>
@@ -44,25 +64,28 @@
             :items="details.participants"
             :headers="headers"
             hide-actions
+          >
+            <template
+              slot="items"
+              slot-scope="props"
             >
-            <template slot="items" slot-scope="props">
               <td>
-                {{props.item.id}}
+                {{ props.item.id }}
               </td>
               <td>
-                {{props.item.first}} {{props.item.last}}
+                {{ props.item.first }} {{ props.item.last }}
               </td>
               <td>
-                {{props.item.dob | date}}
+                {{ props.item.dob | date }}
               </td>
               <td>
-                {{props.item.nick}}
+                {{ props.item.nick }}
               </td>
               <td>
-                {{props.item.mobile || 'None specified'}}
+                {{ props.item.mobile || 'None specified' }}
               </td>
               <td>
-                {{props.item.gender}}
+                {{ props.item.gender }}
               </td>
             </template>
           </v-data-table>
@@ -74,10 +97,22 @@
 
 <script>
 import api from '@/helpers/api'
-import moment from 'moment'
+import Moment from 'moment'
 
 export default {
   name: 'OrderDetails',
+  filters: {
+    date (value) {
+      let date = new Moment(value)
+
+      return date.format('DD/MM/YYYY')
+    },
+    dateTime (value) {
+      let date = new Moment(value)
+
+      return date.format('DD/MM/YYYY HH:mm:ss')
+    }
+  },
   data () {
     return {
       loading: true,
@@ -118,11 +153,11 @@ export default {
       ]
     }
   },
-  created () {
-    this.fetchData()
-  },
   watch: {
     '$route': 'fetchData'
+  },
+  created () {
+    this.fetchData()
   },
   methods: {
     fetchData () {
@@ -131,18 +166,6 @@ export default {
         this.loading = false
         this.details = res.data
       })
-    }
-  },
-  filters: {
-    date (value) {
-      let date = new moment(value)
-
-      return date.format('DD/MM/YYYY')
-    },
-    dateTime (value) {
-      let date = new moment(value)
-
-      return date.format('DD/MM/YYYY HH:mm:ss')
     }
   }
 }

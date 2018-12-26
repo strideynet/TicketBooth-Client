@@ -1,8 +1,11 @@
 <template>
-  <v-flex xs12 lg4>
+  <v-flex
+    xs12
+    lg4
+  >
     <v-card>
       <v-card-title><h3>Terms and Conditions</h3></v-card-title>
-      <v-divider/>
+      <v-divider />
       <v-data-table
         :headers="pricingHeaders"
         :items="quote.purchases"
@@ -10,7 +13,10 @@
         class="elevation-3"
         :loading="loading"
       >
-        <template slot="items" slot-scope="props">
+        <template
+          slot="items"
+          slot-scope="props"
+        >
           <td>{{ props.item.name }}</td>
           <td>{{ props.item.price }}</td>
           <td>{{ props.item.count }}</td>
@@ -18,11 +24,20 @@
         </template>
         <template slot="footer">
           <td colspan="100%">
-            <br/>
-            <h2>Total Cost: £{{quote.totalPrice}}.00</h2>
-            <br/>
-            <pay v-if="validated && quoteJWT" :jwt="quoteJWT" :order-info="orderInfo"></pay>
-            <strong v-else class="red--text">You cannot pay until you have completed the order details.</strong>
+            <br>
+            <h2>Total Cost: £{{ quote.totalPrice }}.00</h2>
+            <br>
+            <pay
+              v-if="validated && quoteJWT"
+              :jwt="quoteJWT"
+              :order-info="orderInfo"
+            />
+            <strong
+              v-else
+              class="red--text"
+            >
+              You cannot pay until you have completed the order details.
+            </strong>
           </td>
         </template>
       </v-data-table>
@@ -37,13 +52,13 @@ import Pay from '@/components/Pay.vue'
 
 export default {
   name: 'PriceBreakdown',
-  computed: {
-    ...mapState(['participants'])
-  },
   components: { Pay },
   props: {
     validated: Boolean,
-    orderInfo: Object
+    orderInfo: {
+      type: Object,
+      default: () => ({})
+    }
   },
   data () {
     return {
@@ -73,9 +88,12 @@ export default {
       quoteJWT: null
     }
   },
+  computed: {
+    ...mapState('store', ['participants'])
+  },
   created () {
     this.$watch('participants', function (newVal, oldVal) {
-      if (this.$store.getters.isParticipantsReady) {
+      if (this.$store.getters['store/isParticipantsReady']) {
         this.loading = true
         api.post('/quotes', this.participants).then((res) => {
           this.loading = false

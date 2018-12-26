@@ -31,11 +31,11 @@ export default {
   name: 'StoreFrame',
   computed: {
     settingsLoaded () {
-      return Object.keys(this.$store.state.settings).length > 0
+      return Object.keys(this.$store.state.store.settings).length > 0
     }
   },
   created () {
-    this.$store.dispatch('updateSettings')
+    this.$store.dispatch('store/updateSettings')
   }
 }
 </script>
