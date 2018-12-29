@@ -7,6 +7,7 @@ export default {
     orders: [],
     participants: [],
     users: [],
+    loading: [],
     jwt: null
   },
   mutations: {
@@ -21,14 +22,52 @@ export default {
     },
     setJWT: (state, jwt) => {
       state.jwt = jwt
+    },
+    startLoading: (state, loader) => {
+      const index = state.loading.indexOf(loader)
+
+      if (index === -1) {
+        state.loading.push(loader)
+      }
+    },
+    stopLoading: (state, loader) => {
+      const index = state.loading.indexOf(loader)
+
+      if (index > -1) {
+        state.loading.splice(index, 1)
+      }
     }
   },
   actions: {
-    login: ({ commit, dispatch, state }, auth) => {
+    login: ({ commit }, auth) => {
       return api.post('/auth', auth)
         .then(res => {
           commit('setJWT', res.data.token)
         })
+    },
+    fetchOrders: ({ commit }) => {
+      commit('startLoading', 'fetch orders')
+
+      return api.get('/orders')
+        .then(res => {
+          commit('setOrders', res.data)
+          commit('stopLoading', 'fetch orders')
+        })
+    },
+    fetchParticipants: ({ commit }) => {
+      commit('startLoading', 'fetch participants')
+
+      return api.get('/participants')
+        .then(res => {
+          commit('setParticipants', res.data)
+          commit('stopLoading', 'fetch participants')
+        })
+    },
+    fetchAllData: ({ dispatch }) => {
+      return Promise.all([dispatch('fetchOrders'), dispatch('fetchParticipants')])
     }
+  },
+  getters: {
+    isAnythingLoading: state => state.loading.length > 0
   }
 }

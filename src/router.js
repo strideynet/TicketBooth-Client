@@ -2,20 +2,31 @@ import Vue from 'vue'
 import store from '@/store'
 import Router from 'vue-router'
 
-import StoreFrame from '@/components/StoreFrame.vue'
+const StoreFrame = () => import('@/components/StoreFrame.vue')
 
-import Home from '@/views/Home.vue'
-import OrderDetails from '@/views/OrderDetails.vue'
+const Home = () => import('@/views/Home.vue')
+const OrderDetails = () => import('@/views/OrderDetails.vue')
 
-import TermsConditions from '@/views/TermsConditions'
-import Participants from '@/views/Participants'
-import Review from '@/views/Review'
+const TermsConditions = () => import('@/views/TermsConditions')
+const Participants = () => import('@/views/Participants')
+const Review = () => import('@/views/Review')
 
-import Login from '@/views/Login'
+const Login = () => import('@/views/Login')
 
-import AdminFrame from '@/components/AdminFrame'
+const AdminFrame = () => import('@/components/AdminFrame')
+const AdminDashboard = () => import('@/views/admin/Dashboard')
+const AdminOrders = () => import('@/views/admin/Orders')
+const AdminParticipants = () => import('@/views/admin/Participants')
+const AdminOrderDetails = () => import('@/views/admin/OrderDetails')
 
 Vue.use(Router)
+
+const authGuard = (to, from, next) => {
+  if (!store.state.admin.jwt) {
+    next('/login')
+  }
+  next()
+}
 
 export default new Router({
   routes: [
@@ -32,7 +43,28 @@ export default new Router({
       component: AdminFrame,
       children: [
         {
-          path: '/'
+          path: '/',
+          redirect: '/admin/dash'
+        },
+        {
+          path: 'dash',
+          beforeEnter: authGuard,
+          component: AdminDashboard
+        },
+        {
+          path: 'orders',
+          beforeEnter: authGuard,
+          component: AdminOrders
+        },
+        {
+          path: 'participants',
+          beforeEnter: authGuard,
+          component: AdminParticipants
+        },
+        {
+          path: 'orders/:id',
+          beforeEnter: authGuard,
+          component: AdminOrderDetails
         }
       ]
     },
