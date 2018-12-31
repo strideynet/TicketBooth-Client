@@ -30,7 +30,7 @@
             label="Nickname"
             placeholder="Placeholder"
             counter="16"
-            :error-messages="$v.nick.$invalid ? 'Nicknames must be between 4 and 16 chars' : null"
+            :error-messages="$v.nick.$invalid ? 'Nicknames must be between 2 and 16 chars' : null"
             hint="This will appear on your number-plate. Keep it family friendly!"
             persistent-hint
           />
@@ -184,7 +184,7 @@ export default {
     },
     nick: {
       required,
-      minLength: minLength(4),
+      minLength: minLength(2),
       maxLength: maxLength(16)
     },
     dob: {

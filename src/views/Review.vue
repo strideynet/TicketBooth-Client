@@ -36,6 +36,7 @@
                       <v-text-field
                         v-model="orderInfo.email"
                         label="Email Address"
+                        type="email"
                         placeholder="Your Email Address"
                         :error-messages="$v.orderInfo.email.$invalid ? 'This field is required' : null"
                       />
