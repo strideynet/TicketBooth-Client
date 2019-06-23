@@ -59,7 +59,7 @@
       >
         <v-card>
           <v-card-title><h4>Participants</h4></v-card-title>
-          <v-divider/>
+          <v-divider />
           <v-data-table
             :items="details.participants"
             :headers="headers"

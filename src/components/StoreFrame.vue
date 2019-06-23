@@ -6,17 +6,26 @@
       </v-toolbar>
       <v-content>
         <v-container grid-list-md>
-          <router-view></router-view>
+          <router-view />
         </v-container>
       </v-content>
     </div>
     <v-content v-else>
-      <v-container fluid fill-height>
-        <v-layout align-center justify-center>
+      <v-container
+        fluid
+        fill-height
+      >
+        <v-layout
+          align-center
+          justify-center
+        >
           <v-flex xs1>
             <v-card class="text-xs-center">
-              <br/>
-              <v-progress-circular indeterminate color="primary"></v-progress-circular>
+              <br />
+              <v-progress-circular
+                indeterminate
+                color="primary"
+              />
               <v-card-text>Loading...</v-card-text>
             </v-card>
           </v-flex>

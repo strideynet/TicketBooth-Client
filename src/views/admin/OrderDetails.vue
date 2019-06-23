@@ -42,7 +42,7 @@
       >
         <v-card>
           <v-card-title><h4>Participants</h4></v-card-title>
-          <v-divider/>
+          <v-divider />
           <v-data-table
             :items="participants"
             :headers="headers"
@@ -66,6 +66,9 @@
               </td>
               <td>
                 {{ props.item.mobile || 'None specified' }}
+              </td>
+              <td>
+                {{ props.item.gender }}
               </td>
               <td>
                 {{ props.item.gender }}
@@ -130,6 +133,11 @@ export default {
         {
           text: 'Gender',
           value: 'gender',
+          sortable: false
+        },
+        {
+          text: 'Actions',
+          value: 'id',
           sortable: false
         }
       ]
