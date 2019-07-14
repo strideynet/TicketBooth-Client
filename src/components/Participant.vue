@@ -103,6 +103,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
+import { genderOptions } from '@/helpers/constants'
 import moment from 'moment'
 
 import { minLength, maxLength, required, requiredIf } from 'vuelidate/lib/validators'
@@ -129,20 +130,7 @@ export default {
   data () {
     return {
       dateSelector: false,
-      genderOptions: [
-        {
-          text: 'Male',
-          value: 'male'
-        },
-        {
-          text: 'Female',
-          value: 'female'
-        },
-        {
-          text: 'Other',
-          value: 'other'
-        }
-      ]
+      genderOptions
     }
   },
   computed: {

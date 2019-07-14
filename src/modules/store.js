@@ -1,7 +1,7 @@
 import api from '../helpers/api'
 import Moment from 'moment'
 
-function isParticipantsReady (state) {
+const isParticipantsReady = (state) => {
   if (state.participants.length > 0) {
     return state.participants.every((participant) => !participant.invalid)
   }

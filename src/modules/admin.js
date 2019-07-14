@@ -17,6 +17,15 @@ export default {
     setParticipants: (state, participants) => {
       state.participants = participants
     },
+    deleteParticipant: (state, participant) => {
+      state.participants = state.participants.filter(val => val.id !== participant.id)
+    },
+    updateParticipant: (state, participant) => {
+      state.participants = [
+        ...state.participants.filter(val => val.id !== participant.id),
+        participant
+      ]
+    },
     setUsers: (state, users) => {
       state.users = users
     },
@@ -39,29 +48,34 @@ export default {
     }
   },
   actions: {
-    login: ({ commit }, auth) => {
-      return api.post('/auth', auth)
-        .then(res => {
-          commit('setJWT', res.data.token)
-        })
+    login: async ({ commit }, auth) => {
+      const res = await api.post('/auth', auth)
+
+      commit('setJWT', res.data.token)
     },
-    fetchOrders: ({ commit }) => {
+    fetchOrders: async ({ commit }) => {
       commit('startLoading', 'fetch orders')
 
-      return api.get('/orders')
-        .then(res => {
-          commit('setOrders', res.data)
-          commit('stopLoading', 'fetch orders')
-        })
+      const res = await api.get('/orders')
+
+      commit('setOrders', res.data)
+      commit('stopLoading', 'fetch orders')
     },
-    fetchParticipants: ({ commit }) => {
+    fetchParticipants: async ({ commit }) => {
       commit('startLoading', 'fetch participants')
 
-      return api.get('/participants')
-        .then(res => {
-          commit('setParticipants', res.data)
-          commit('stopLoading', 'fetch participants')
-        })
+      const res = await api.get('/participants')
+
+      commit('setParticipants', res.data)
+      commit('stopLoading', 'fetch participants')
+    },
+    deleteParticipant: async ({ commit }, participant) => {
+      await api.delete(`/participants/${participant.id}`)
+      commit('deleteParticipant', participant)
+    },
+    patchParticipant: async ({ commit }, participant) => {
+      const res = await api.patch(`/participants/${participant.id}`, participant)
+      commit('updateParticipant', res.data)
     },
     fetchAllData: ({ dispatch }) => {
       return Promise.all([dispatch('fetchOrders'), dispatch('fetchParticipants')])
