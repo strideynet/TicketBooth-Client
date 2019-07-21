@@ -39,6 +39,9 @@
             <v-list-tile>
               <p><strong>Type:</strong> {{ order.type }}</p>
             </v-list-tile>
+            <v-list-tile>
+              <p><strong>Note:</strong> {{ order.note }}</p>
+            </v-list-tile>
           </v-list>
         </v-card>
       </v-flex>
@@ -47,7 +50,16 @@
         lg8
       >
         <v-card>
-          <v-card-title><h4>Participants</h4></v-card-title>
+          <v-card-title>
+            <h4>Participants</h4>
+            <v-spacer />
+            <v-btn
+              color="primary"
+              @click="newParticipant"
+            >
+              New Participant
+            </v-btn>
+          </v-card-title>
           <v-divider />
           <v-data-table
             :items="participants"
@@ -105,7 +117,10 @@
       <v-card>
         <v-card-title>
           <span class="headline">
-            {{ modifiedParticipant.first }} {{ modifiedParticipant.last }}
+            <strong>
+              {{ modalMode === 'create' ? 'CREATE' : 'EDIT' }}
+            </strong>
+            {{ modifiedParticipant.first }} "{{ modifiedParticipant.nick }}" {{ modifiedParticipant.last }}
           </span>
         </v-card-title>
         <v-card-text>
@@ -169,6 +184,7 @@
             color="blue darken-1"
             flat
             @click="saveParticipant"
+            :loading="modalLoading"
           >
             Save
           </v-btn>
@@ -180,7 +196,7 @@
 
 <script>
 import Moment from 'moment'
-import { genderOptions } from '@/helpers/constants'
+import { genderOptions, newParticipant } from '@/helpers/constants'
 
 export default {
   name: 'AdminOrderDetails',
@@ -237,6 +253,8 @@ export default {
       ],
       showModal: false,
       dateSelector: false,
+      modalMode: 'create',
+      modalLoading: false,
       modifiedParticipant: {
       },
       genderOptions
@@ -265,10 +283,25 @@ export default {
      */
     modifyParticipant (participant) {
       this.modifiedParticipant = Object.assign({}, participant)
+      this.modalMode = 'modify'
+
+      this.showModal = true
+    },
+    newParticipant () {
+      this.modifiedParticipant = Object.assign({}, {
+        ...newParticipant,
+        dob: '2017-05-20T00:00:00.000Z',
+        orderId: this.$route.params.id
+      })
+      this.modalMode = 'create'
+
       this.showModal = true
     },
     async saveParticipant () {
-      this.$store.dispatch('admin/patchParticipant', this.modifiedParticipant)
+      const action = this.modalMode === 'create' ? 'admin/postParticipant' : 'admin/patchParticipant'
+      this.modalLoading = true
+      await this.$store.dispatch(action, this.modifiedParticipant)
+      this.modalLoading = false
       this.showModal = false
     }
   }

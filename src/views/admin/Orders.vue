@@ -17,6 +17,12 @@
           single-line
           hide-details
         />
+        <v-btn
+          color="primary"
+          @click="newOrder"
+        >
+          New Order
+        </v-btn>
       </v-card-title>
       <v-data-table
         :headers="headers"
@@ -44,6 +50,76 @@
         </template>
       </v-data-table>
     </v-card>
+    <v-dialog
+      v-model="showModal"
+      persistent
+      max-width="600px"
+    >
+      <v-card>
+        <v-card-title>
+          <span class="headline">
+            <strong>
+              CREATE ORDER
+            </strong>
+          </span>
+        </v-card-title>
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-layout wrap>
+              <v-flex md4>
+                <v-text-field
+                  v-model="modalForm.partyName"
+                  label="Party Name"
+                />
+              </v-flex>
+              <v-flex md4>
+                <v-text-field
+                  v-model="modalForm.yearsAtTheBash"
+                  label="Years At Bash"
+                />
+              </v-flex>
+              <v-flex md4>
+                <v-text-field
+                  v-model="modalForm.value"
+                  label="Order Value"
+                />
+              </v-flex>
+              <v-flex md12>
+                <v-text-field
+                  v-model="modalForm.email"
+                  label="Party Email"
+                />
+              </v-flex>
+              <v-flex md12>
+                <v-textarea
+                  v-model="modalForm.note"
+                  label="Order Note"
+                  hint="This could be customer facing. Be careful what you say :)"
+                />
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            color="blue darken-1"
+            flat
+            @click="showModal = false"
+          >
+            Close
+          </v-btn>
+          <v-btn
+            color="blue darken-1"
+            flat
+            :loading="modalLoading"
+            @click="saveOrder"
+          >
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -90,6 +166,15 @@ export default {
           text: 'Years at Bash'
         }
       ],
+      showModal: false,
+      modalLoading: false,
+      modalForm: {
+        partyName: 'The Smiths',
+        value: 0,
+        email: 'john@thesmiths.com',
+        yearsAtTheBash: -1,
+        note: ''
+      },
       pagination: {
         rowsPerPage: 20
       }
@@ -113,6 +198,15 @@ export default {
       })
 
       return fuse.search(search)
+    },
+    newOrder () {
+      this.showModal = true
+    },
+    async saveOrder () {
+      this.modalLoading = true
+      const newOrder = await this.$store.dispatch('admin/postOrder', this.modalForm)
+      this.modalLoading = false
+      this.$router.push(`/admin/orders/${newOrder.id}`)
     }
   }
 }

@@ -14,6 +14,12 @@ export default {
     setOrders: (state, orders) => {
       state.orders = orders
     },
+    addOrder: (state, order) => {
+      state.orders = [
+        ...state.orders,
+        order
+      ]
+    },
     setParticipants: (state, participants) => {
       state.participants = participants
     },
@@ -23,6 +29,12 @@ export default {
     updateParticipant: (state, participant) => {
       state.participants = [
         ...state.participants.filter(val => val.id !== participant.id),
+        participant
+      ]
+    },
+    addParticipant: (state, participant) => {
+      state.participants = [
+        ...state.participants,
         participant
       ]
     },
@@ -76,6 +88,16 @@ export default {
     patchParticipant: async ({ commit }, participant) => {
       const res = await api.patch(`/participants/${participant.id}`, participant)
       commit('updateParticipant', res.data)
+    },
+    postParticipant: async ({ commit }, participant) => {
+      const res = await api.post(`/participants`, participant)
+      commit('addParticipant', res.data)
+    },
+    postOrder: async ({ commit }, order) => {
+      const res = await api.post(`/orders`, order)
+      commit('addOrder', res.data)
+
+      return res.data
     },
     fetchAllData: ({ dispatch }) => {
       return Promise.all([dispatch('fetchOrders'), dispatch('fetchParticipants')])

@@ -12,3 +12,12 @@ export const genderOptions = [
     value: 'other'
   }
 ]
+
+export const newParticipant = {
+  first: 'John',
+  last: 'Smith',
+  nick: 'Smithy',
+  gender: 'male',
+  dob: null,
+  mobile: null
+}

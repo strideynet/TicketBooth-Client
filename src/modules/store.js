@@ -1,5 +1,6 @@
 import api from '../helpers/api'
 import Moment from 'moment'
+import { newParticipant } from '../helpers/constants'
 
 const isParticipantsReady = (state) => {
   if (state.participants.length > 0) {
@@ -29,15 +30,10 @@ export default {
       }
     },
     addParticipant: state => {
-      state.participants.push({
-        first: 'John',
-        last: 'Smith',
-        nick: 'Smithy',
-        gender: '',
-        dob: null,
-        mobile: null,
+      state.participants.push(Object.assign({}, {
+        ...newParticipant,
         invalid: true
-      })
+      }))
     },
     deleteParticipant: (state, participant) => {
       let index = state.participants.indexOf(participant)
