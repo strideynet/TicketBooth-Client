@@ -41,6 +41,8 @@
             @click="$router.push('/admin/orders/' + props.item.id)"
           >
             <td>{{ props.item.id }}</td>
+            <td>{{ props.item.status }}</td>
+            <td>{{ props.item.type }}</td>
             <td>{{ props.item.createdAt | dateTime }}</td>
             <td>{{ props.item.partyName }}</td>
             <td>£{{ props.item.value }}</td>
@@ -144,6 +146,14 @@ export default {
         {
           value: 'id',
           text: 'Unique ID'
+        },
+        {
+          value: 'status',
+          text: 'Status'
+        },
+        {
+          value: 'type',
+          text: 'Type'
         },
         {
           value: 'createdAt',

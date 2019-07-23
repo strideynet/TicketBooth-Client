@@ -12,37 +12,106 @@
         lg4
       >
         <v-card>
-          <v-card-title><h4>Order</h4></v-card-title>
+          <v-card-title>
+            <h4><strong>{{ order.status }}</strong> Order</h4>
+          </v-card-title>
           <v-divider />
-          <v-list dense>
-            <v-list-tile>
-              <p><strong>Email:</strong> {{ order.email }}</p>
-            </v-list-tile>
-            <v-list-tile>
-              <p><strong>Ticket Number:</strong> {{ order.id }}</p>
-            </v-list-tile>
-            <v-list-tile>
-              <p><strong>Paypal ID:</strong> {{ order.paypalPayment }}</p>
-            </v-list-tile>
-            <v-list-tile>
-              <p><strong>Ticket Value:</strong> £{{ order.value }}</p>
-            </v-list-tile>
-            <v-list-tile>
-              <p><strong>Party Name:</strong> {{ order.partyName }}</p>
-            </v-list-tile>
-            <v-list-tile>
-              <p><strong>Order Date & Time:</strong> {{ order.createdAt | dateTime }}</p>
-            </v-list-tile>
-            <v-list-tile>
-              <p><strong>Status:</strong> {{ order.status }}</p>
-            </v-list-tile>
-            <v-list-tile>
-              <p><strong>Type:</strong> {{ order.type }}</p>
-            </v-list-tile>
-            <v-list-tile>
-              <p><strong>Note:</strong> {{ order.note }}</p>
-            </v-list-tile>
-          </v-list>
+          <v-card-text>
+            <v-layout wrap>
+              <v-flex md12>
+                <v-text-field
+                  v-model="modifiedOrder.partyName"
+                  label="Party Name"
+                />
+              </v-flex>
+              <v-flex md12>
+                <v-text-field
+                  v-model="modifiedOrder.email"
+                  label="Party Email"
+                />
+              </v-flex>
+              <v-flex md12>
+                <v-text-field
+                  v-model="modifiedOrder.value"
+                  label="Order Value"
+                />
+              </v-flex>
+
+              <v-flex md12>
+                <v-textarea
+                  v-model="modifiedOrder.note"
+                  label="Order Note"
+                />
+              </v-flex>
+
+              <v-flex md12>
+                <v-text-field
+                  v-model="modifiedOrder.id"
+                  label="Ticket Number"
+                  disabled
+                />
+              </v-flex>
+
+              <v-flex md12>
+                <v-text-field
+                  v-model="modifiedOrder.paypalPayment"
+                  label="Paypal ID"
+                  disabled
+                />
+              </v-flex>
+
+              <v-flex md12>
+                <v-text-field
+                  v-model="modifiedOrder.createdAt"
+                  label="Created At:"
+                  disabled
+                />
+              </v-flex>
+
+              <v-flex md12>
+                <v-text-field
+                  v-model="modifiedOrder.status"
+                  label="Status"
+                  disabled
+                />
+              </v-flex>
+
+              <v-flex md12>
+                <v-text-field
+                  v-model="modifiedOrder.type"
+                  label="Type"
+                  disabled
+                />
+              </v-flex>
+            </v-layout>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn
+              v-if="order.status === 'CONFIRMED'"
+              color="red"
+              :loading="statusUpdateLoading"
+              @click="changeStatus('CANCELLED')"
+            >
+              Mark Cancelled
+            </v-btn>
+            <v-btn
+              v-if="order.status === 'CANCELLED'"
+              color="green"
+              :loading="statusUpdateLoading"
+              @click="changeStatus('CONFIRMED')"
+            >
+              Mark Confirmed
+            </v-btn>
+            <v-btn
+              color="blue darken-1"
+              :disabled="!isDirtied || orderDetailsLoading"
+              :loading="orderDetailsLoading"
+              @click="patchOrder"
+            >
+              Save
+            </v-btn>
+          </v-card-actions>
         </v-card>
       </v-flex>
       <v-flex
@@ -183,8 +252,8 @@
           <v-btn
             color="blue darken-1"
             flat
-            @click="saveParticipant"
             :loading="modalLoading"
+            @click="saveParticipant"
           >
             Save
           </v-btn>
@@ -197,6 +266,7 @@
 <script>
 import Moment from 'moment'
 import { genderOptions, newParticipant } from '@/helpers/constants'
+import _ from 'lodash'
 
 export default {
   name: 'AdminOrderDetails',
@@ -255,7 +325,12 @@ export default {
       dateSelector: false,
       modalMode: 'create',
       modalLoading: false,
+      statusUpdateLoading: false,
+      orderDetailsLoading: false,
       modifiedParticipant: {
+      },
+      modifiedOrder: {
+
       },
       genderOptions
     }
@@ -266,6 +341,18 @@ export default {
     },
     participants () {
       return this.$store.state.admin.participants.filter(participant => participant.orderId === Number(this.$route.params.id))
+    },
+    isDirtied () {
+      return !_.isEqual(this.modifiedOrder, this.order)
+    }
+  },
+  watch: {
+    order: {
+      immediate: true,
+      deep: true,
+      handler: function (val) {
+        this.modifiedOrder = Object.assign({}, val)
+      }
     }
   },
   methods: {
@@ -303,6 +390,19 @@ export default {
       await this.$store.dispatch(action, this.modifiedParticipant)
       this.modalLoading = false
       this.showModal = false
+    },
+    async changeStatus (newStatus) {
+      this.statusUpdateLoading = true
+      await this.$store.dispatch('admin/patchOrder', {
+        id: this.order.id,
+        status: newStatus
+      })
+      this.statusUpdateLoading = false
+    },
+    async patchOrder () {
+      this.orderDetailsLoading = true
+      await this.$store.dispatch('admin/patchOrder', this.modifiedOrder)
+      this.orderDetailsLoading = false
     }
   }
 }

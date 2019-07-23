@@ -20,6 +20,12 @@ export default {
         order
       ]
     },
+    updateOrder: (state, order) => {
+      state.orders = [
+        ...state.orders.filter(val => val.id !== order.id),
+        order
+      ]
+    },
     setParticipants: (state, participants) => {
       state.participants = participants
     },
@@ -98,6 +104,10 @@ export default {
       commit('addOrder', res.data)
 
       return res.data
+    },
+    patchOrder: async ({ commit }, order) => {
+      const res = await api.patch(`/orders/${order.id}`, order)
+      commit('updateOrder', res.data)
     },
     fetchAllData: ({ dispatch }) => {
       return Promise.all([dispatch('fetchOrders'), dispatch('fetchParticipants')])
