@@ -31,12 +31,13 @@
           slot-scope="props"
         >
           <td>{{ props.item.id }}</td>
+          <td>{{ props.item.order.status }}</td>
           <td
             style="cursor: pointer"
             @click="$router.push('/admin/orders/' + props.item.orderId)"
           >
             <a>
-              More...
+              {{ props.item.orderId }} (More...)
             </a>
           </td>
           <td>{{ props.item.first }}</td>
@@ -71,6 +72,10 @@ export default {
         {
           value: 'id',
           text: 'Unique ID'
+        },
+        {
+          value: 'order.status',
+          text: 'Order Status'
         },
         {
           value: 'orderId',
