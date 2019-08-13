@@ -57,6 +57,15 @@
     <h2>
       Order Stats
     </h2>
+    <h2>
+      Data Exports
+    </h2>
+    <a :href="'https://api.bigbikebash.org.uk/api/exports/raceplates?auth=' + jwt">
+      raceplates
+    </a>
+    <a :href="'https://api.bigbikebash.org.uk/api/exports/labels?auth=' + jwt">
+      labels
+    </a>
   </v-container>
 </template>
 
@@ -69,7 +78,8 @@ export default {
     ...mapState('admin', {
       participantCount: state => state.participants.length,
       orderCount: state => state.orders.length,
-      orderValue: state => state.orders.reduce((sum, order) => sum + Number(order.value), 0)
+      orderValue: state => state.orders.reduce((sum, order) => sum + Number(order.value), 0),
+      jwt: state => state.jwt
     })
   }
 }
