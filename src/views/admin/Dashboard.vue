@@ -61,10 +61,15 @@
       Data Exports
     </h2>
     <a :href="'https://api.bigbikebash.org.uk/api/exports/raceplates?auth=' + jwt">
-      raceplates
+      <h3>
+        raceplates
+      </h3>
     </a>
+    <br/>
     <a :href="'https://api.bigbikebash.org.uk/api/exports/labels?auth=' + jwt">
-      labels
+      <h3>
+        labels
+      </h3>
     </a>
   </v-container>
 </template>
