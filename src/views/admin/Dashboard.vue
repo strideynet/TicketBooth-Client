@@ -60,17 +60,13 @@
     <h2>
       Data Exports
     </h2>
-    <a :href="'https://api.bigbikebash.org.uk/api/exports/raceplates?auth=' + jwt">
-      <h3>
-        raceplates
-      </h3>
-    </a>
-    <br/>
-    <a :href="'https://api.bigbikebash.org.uk/api/exports/labels?auth=' + jwt">
-      <h3>
-        labels
-      </h3>
-    </a>
+    <v-btn :href="'https://api.bigbikebash.org.uk/api/exports/raceplates?auth=' + jwt">
+      Download Raceplates TSV
+    </v-btn>
+    <br />
+    <v-btn :href="'https://api.bigbikebash.org.uk/api/exports/labels?auth=' + jwt">
+      Download Labels TSV
+    </v-btn>
   </v-container>
 </template>
 
