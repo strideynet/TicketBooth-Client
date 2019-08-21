@@ -67,6 +67,9 @@
     <v-btn :href="'https://api.bigbikebash.org.uk/api/exports/labels?auth=' + jwt">
       Download Labels TSV
     </v-btn>
+    <v-btn :href="'https://api.bigbikebash.org.uk/api/exports/registration?auth=' + jwt">
+      Download Registration TSV
+    </v-btn>
   </v-container>
 </template>
 
