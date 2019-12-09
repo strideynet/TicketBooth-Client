@@ -83,11 +83,7 @@ export default {
         return false
       }
 
-      if (state.overrideCode) {
-        return true
-      }
-
-      if (!getters.isSalesOpen) {
+      if (!getters.isSalesOpen && state.overrideCode !== 'danlikesbeer') {
         return false
       }
 

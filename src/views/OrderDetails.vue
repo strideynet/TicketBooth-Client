@@ -87,6 +87,9 @@
               <td>
                 {{ props.item.gender }}
               </td>
+              <td>
+                {{ props.item.bedAndBreakfast ? 'Yes' : 'No' }}
+              </td>
             </template>
           </v-data-table>
         </v-card>
@@ -149,6 +152,10 @@ export default {
           text: 'Gender',
           value: 'gender',
           sortable: false
+        },
+        {
+          text: 'Bed and Breakfast',
+          sortable: false
         }
       ]
     }
@@ -160,12 +167,12 @@ export default {
     this.fetchData()
   },
   methods: {
-    fetchData () {
+    async fetchData () {
       this.loading = true
-      api.get(`/orders/${this.$route.params.id}/${this.$route.params.secret}`, this.participants).then((res) => {
-        this.loading = false
-        this.details = res.data
-      })
+      const res = await api.get(`/orders/${this.$route.params.id}/${this.$route.params.secret}`, this.participants)
+      this.loading = false
+
+      this.details = res.data
     }
   }
 }

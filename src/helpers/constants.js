@@ -19,5 +19,6 @@ export const newParticipant = {
   nick: 'Smithy',
   gender: 'male',
   dob: null,
-  mobile: null
+  mobile: null,
+  bedAndBreakfast: false
 }

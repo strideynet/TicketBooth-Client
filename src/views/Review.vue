@@ -74,6 +74,7 @@
                   <td>{{ props.item.nick }}</td>
                   <td>{{ props.item.dob }}</td>
                   <td>{{ age(props.item.dob) }}</td>
+                  <td>{{ props.item.bedAndBreakfast ? 'Yes' : 'No' }}</td>
                 </template>
               </v-data-table>
             </v-card>
@@ -136,6 +137,10 @@ export default {
           },
           {
             text: 'Age At Bash',
+            sortable: false
+          },
+          {
+            text: 'Bed and Breakfast',
             sortable: false
           }
         ]

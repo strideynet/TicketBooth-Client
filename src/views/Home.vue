@@ -17,7 +17,7 @@
                 Big Bike Bash is returning bigger and better for 2019. We hope you are looking forward to it as much as we are with another year of fun for the whole family.
                 When ordering your tickets please make sure you read the Terms and Conditions carefully.
                 <br><br>
-                Should you have any difficulties using the site, please contact help@bigbikebash.org.uk
+                Should you have any difficulties using the site, please contact admin@bigbikebash.org.uk
               </span>
             </div>
 

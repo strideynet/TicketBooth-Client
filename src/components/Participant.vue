@@ -27,11 +27,11 @@
 
           <v-text-field
             v-model="nick"
-            label="Nickname"
+            label="Raceplate Nickname"
             placeholder="Placeholder"
             counter="16"
             :error-messages="$v.nick.$invalid ? 'Nicknames must be between 2 and 16 chars' : null"
-            hint="This will appear on your number-plate. Keep it family friendly!"
+            hint="This nickname will appear on your number-plate. Keep it family friendly!"
             persistent-hint
           />
 
@@ -69,6 +69,12 @@
               @change="saveDate"
             />
           </v-menu>
+
+          <v-checkbox
+            v-if="age"
+            v-model="bedAndBreakfast"
+            :label="`Bed and Breakfast (+£${bnbPrice}.00)`"
+          />
 
           <v-text-field
             v-if="age >= 18"
@@ -134,13 +140,16 @@ export default {
     }
   },
   computed: {
-    ...['first', 'last', 'nick', 'mobile', 'dob', 'gender'].reduce((acc, key) => ({ ...acc, [key]: produceComputedProperty(key) }), {}), // maps getter/setters for participant fancily
+    ...['first', 'last', 'nick', 'mobile', 'dob', 'gender', 'bedAndBreakfast'].reduce((acc, key) => ({ ...acc, [key]: produceComputedProperty(key) }), {}), // maps getter/setters for participant fancily
     age () {
       if (this.dob) {
         return moment(this.$store.state.store.settings.bashDate).diff(this.dob, 'years')
       }
 
       return 0
+    },
+    bnbPrice () {
+      return this.dob && this.age < 18 ? 30 : 50
     }
   },
   watch: {
@@ -184,6 +193,9 @@ export default {
       })
     },
     gender: {
+      required
+    },
+    bedAndBreakfast: {
       required
     }
   }

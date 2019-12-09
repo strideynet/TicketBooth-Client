@@ -45,6 +45,7 @@
           <td>{{ props.item.nick }}</td>
           <td>{{ props.item.dob | date }}</td>
           <td>{{ props.item.mobile }}</td>
+          <td>{{ props.item.bedAndBreakfast ? 'Yes' : 'No' }}</td>
         </template>
       </v-data-table>
     </v-card>
@@ -100,6 +101,10 @@ export default {
         {
           value: 'mobile',
           text: 'Mobile'
+        },
+        {
+          text: 'Bed and Breakfast',
+          value: 'bedAndBreakfast'
         }
       ],
       pagination: {

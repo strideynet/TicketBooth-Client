@@ -45,7 +45,7 @@ export default {
       },
 
       client: {
-        sandbox: 'AbWOHwxVEl8WAQvPxGOWF4LQAbo9n-PBBg6A9RDHEwSal64k2aHbuW1vNoV0wguwkFnDcKX89ppI5vdw',
+        sandbox: 'AbSd1YdB-bEO1fAbtUfBDzk-KHIGlIiqQhdzYRW73HsI7dksPlFuMW_PMLPfl0xl4tVbruAkE8FQjUto',
         production: 'AT99udy6QwHym74yFhgilqEVyiAu42cFGvP24hhIZf10h0-fiEAEW8POLV5530OVSBtHb2OJmrRmw2_2'
       },
 
@@ -55,14 +55,14 @@ export default {
           orderInfo: this.orderInfo
         }).then((res) => {
           this.paymentJWT = res.data.jwt
-          return res.data.paymentID
+          return res.data.paymentId
         })
       },
 
       onAuthorize: (data) => {
         return api.post('/payment/execute', {
           paymentJWT: this.paymentJWT,
-          payerID: data.payerID
+          payerId: data.payerID
         }).then((res) => {
           this.$router.push({ name: 'details', params: { id: res.data.id, secret: res.data.secret } })
         })

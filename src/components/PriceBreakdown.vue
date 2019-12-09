@@ -4,7 +4,7 @@
     lg4
   >
     <v-card>
-      <v-card-title><h3>Terms and Conditions</h3></v-card-title>
+      <v-card-title><h3>Price Breakdown</h3></v-card-title>
       <v-divider />
       <v-data-table
         :headers="pricingHeaders"
@@ -18,9 +18,9 @@
           slot-scope="props"
         >
           <td>{{ props.item.name }}</td>
-          <td>{{ props.item.price }}</td>
-          <td>{{ props.item.count }}</td>
-          <td>{{ props.item.totalPrice }}</td>
+          <td class="text-xs-right">£{{ props.item.price }}.00</td>
+          <td class="text-xs-right">{{ props.item.quantity }}</td>
+          <td class="text-xs-right">£{{ props.item.price * props.item.quantity }}.00</td>
         </template>
         <template slot="footer">
           <td colspan="100%">

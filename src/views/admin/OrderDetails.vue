@@ -158,6 +158,9 @@
                 {{ props.item.gender }}
               </td>
               <td>
+                {{ props.item.bedAndBreakfast ? 'Yes' : 'No' }}
+              </td>
+              <td>
                 <v-icon
                   class="mr-2"
                   @click="modifyParticipant(props.item)"
@@ -226,6 +229,13 @@
                 <v-text-field
                   v-model="modifiedParticipant.mobile"
                   label="Mobile Number"
+                />
+              </v-flex>
+
+              <v-flex md12>
+                <v-checkbox
+                  v-model="modifiedParticipant.bedAndBreakfast"
+                  label="Bed and Breakfast"
                 />
               </v-flex>
 
@@ -316,6 +326,10 @@ export default {
           sortable: false
         },
         {
+          text: 'Bed and Breakfast',
+          sortable: false
+        },
+        {
           text: 'Actions',
           value: 'id',
           sortable: false
@@ -330,17 +344,16 @@ export default {
       modifiedParticipant: {
       },
       modifiedOrder: {
-
       },
       genderOptions
     }
   },
   computed: {
     order () {
-      return this.$store.state.admin.orders.find(order => order.id === Number(this.$route.params.id))
+      return this.$store.state.admin.orders.find(order => order.id === this.$route.params.id)
     },
     participants () {
-      return this.$store.state.admin.participants.filter(participant => participant.orderId === Number(this.$route.params.id))
+      return this.$store.state.admin.participants.filter(participant => participant.orderId === this.$route.params.id)
     },
     isDirtied () {
       return !_.isEqual(this.modifiedOrder, this.order)
