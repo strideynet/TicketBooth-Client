@@ -60,14 +60,14 @@
     <h2>
       Data Exports
     </h2>
-    <v-btn :href="'https://api.bigbikebash.org.uk/api/exports/raceplates?auth=' + jwt">
+    <v-btn :href="'https://api.bigbikebash.org.uk/v1/exports/raceplates?auth=' + jwt">
       Download Raceplates TSV
     </v-btn>
     <br />
-    <v-btn :href="'https://api.bigbikebash.org.uk/api/exports/labels?auth=' + jwt">
+    <v-btn :href="'https://api.bigbikebash.org.uk/v1/exports/labels?auth=' + jwt">
       Download Labels TSV
     </v-btn>
-    <v-btn :href="'https://api.bigbikebash.org.uk/api/exports/registration?auth=' + jwt">
+    <v-btn :href="'https://api.bigbikebash.org.uk/v1/exports/registration?auth=' + jwt">
       Download Registration TSV
     </v-btn>
   </v-container>
@@ -80,7 +80,8 @@ export default {
   name: 'AdminDashboard',
   computed: {
     ...mapState('admin', {
-      participantCount: state => state.participants.length,
+      participantCount: state =>
+        state.participants.filter(participant => participant.order && participant.order.status === 'CONFIRMED').length,
       orderCount: state => state.orders.length,
       orderValue: state => state.orders.reduce((sum, order) => sum + Number(order.value), 0),
       jwt: state => state.jwt
